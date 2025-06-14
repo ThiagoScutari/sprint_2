@@ -1,16 +1,33 @@
+#  Sistema de Monitoramento de Enfesto em Indústrias Têxteis
+
+##  Grupo: 44
+
+### 👨‍💻 Integrantes:
+
+* Thiago Scutari - RM562831 | [thiago.scutari@outlook.com](mailto:thiago.scutari@outlook.com)
+* Hnrique Ribiro Siqueira - RM565044 | [henrique.ribeiro1201@gmail.com](mailto:henrique.ribeiro1201@gmail.com)
+* Mariana Cavalante Oliveira - RM561678 | [mari.kvalcant@gmail.com](mailto:mari.kvalcant@gmail.com)
+
+### 👩‍🏫 Professores:
+
+* Leonardo Ruiz Orabona
+* Andre Godoi Chiovato
+
+---
+
 # 📦 Sistema de Monitoramento de Enfestos com ESP32 + Python + SQLite
 
 Projeto completo de simulação e análise de um sistema de monitoramento de **folhas de tecido (enfesto)**, utilizando sensores simulados com ESP32, banco de dados local em SQLite, análise em Python, gráficos interativos com Plotly e exportação de relatórios.
 
 ---
 
-## 🎯 Objetivo
+## Objetivo
 
 Simular um processo industrial de **movimentação de tecido**, em que um sensor ultrassônico mede a distância em tempo real e, com isso, identificamos **quantas folhas foram passadas** (ida e volta da máquina).
 
 ---
 
-## 🧩 Componentes do Projeto
+## Componentes do Projeto
 
 - **ESP32 (simulado via Wokwi)** com sensor ultrassônico
 - **Leitura contínua dos dados via porta serial (RFC2217)**
@@ -46,7 +63,7 @@ SPRINT_2/
 
 ---
 
-## 🛠️ Requisitos
+## Requisitos
 
 - Python 3.10+
 - pip
@@ -54,7 +71,7 @@ SPRINT_2/
 
 ---
 
-## 📦 Instalação
+## Instalação
 
 ```bash
 # Clone o projeto
@@ -73,7 +90,7 @@ pip install -r requirements.txt
 
 ---
 
-## 🚀 Execução
+## Execução
 
 ### 1. Inicie a simulação no Wokwi (sensor conectado à porta RFC2217)
 
@@ -99,7 +116,7 @@ Você poderá:
 
 ---
 
-## 🧠 Funcionalidades disponíveis via `main.py`
+## Funcionalidades disponíveis via `main.py`
 
 | Opção | Ação |
 |-------|------|
@@ -114,7 +131,7 @@ Você poderá:
 
 ---
 
-## 🧪 Exemplo de Registro
+## Exemplo de Registro
 
 ```
 [2025-06-13 21:52:45]  399.9 cm | OP=OP00123 | folhas=4
