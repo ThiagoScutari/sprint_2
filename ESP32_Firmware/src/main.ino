@@ -1,61 +1,60 @@
 #include <WiFi.h>
-#include <DHT.h>
 #include <time.h>
-#include <SPIFFS.h>   // ← Biblioteca para sistema de arquivos
-#include "secrets.h"  // ← inclui dados sensíveis
+#include "secrets.h"  // Define WIFI_SSID e WIFI_PASSWORD
 
-#define PINO_DHT 23
-#define MODELO_DHT DHT22
-
-DHT dht(PINO_DHT, MODELO_DHT);
-unsigned long id = 1;
+#define TRIG_PIN 23
+#define ECHO_PIN 22
 
 void setup() {
-    Serial.begin(115200);
-    dht.begin();
+  Serial.begin(115200);
 
-    WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-    Serial.print("Conectando ao Wi-Fi");
-    while (WiFi.status() != WL_CONNECTED) {
-        delay(500);
-        Serial.print(".");
-    }
-    Serial.println("\nWi-Fi conectado com sucesso!");
+  pinMode(TRIG_PIN, OUTPUT);
+  pinMode(ECHO_PIN, INPUT);
 
-    configTime(-3 * 3600, 0, "pool.ntp.org");
+  // Conexão Wi-Fi
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+  Serial.print("Conectando ao Wi-Fi");
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println("\nWi-Fi conectado com sucesso!");
 
-    struct tm timeinfo;
-    while (!getLocalTime(&timeinfo)) {
-        Serial.println("Aguardando sincronização NTP...");
-        delay(1000);
-    }
+  // Sincroniza horário via NTP
+  configTime(-3 * 3600, 0, "pool.ntp.org");
+  struct tm timeinfo;
+  while (!getLocalTime(&timeinfo)) {
+    Serial.println("Aguardando sincronização NTP...");
+    delay(1000);
+  }
 
-    Serial.println("id,datetime,temperatura,umidade");
+  Serial.println("data_hora,distancia_cm");
 }
 
 void loop() {
-    float h = dht.readHumidity();
-    float t = dht.readTemperature();
+  // Leitura do sensor HC-SR04
+  digitalWrite(TRIG_PIN, LOW);
+  delayMicroseconds(2);
+  digitalWrite(TRIG_PIN, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(TRIG_PIN, LOW);
 
-    if (isnan(h) || isnan(t)) {
-        Serial.println("Falha ao ler do sensor DHT!");
-        delay(2000);
-        return;
-    }
+  long duration = pulseIn(ECHO_PIN, HIGH);
+  float distance_cm = duration * 0.034 / 2;
 
-    struct tm timeinfo;
-    if (!getLocalTime(&timeinfo)) {
-        Serial.println("Erro ao obter hora local");
-        delay(2000);
-        return;
-    }
-
+  // Obtenção da data/hora
+  struct tm timeinfo;
+  if (getLocalTime(&timeinfo)) {
     char datetime[25];
     strftime(datetime, sizeof(datetime), "%Y-%m-%d %H:%M:%S", &timeinfo);
 
-    String linha = String(id) + "," + String(datetime) + "," + String(t, 2) + "," + String(h, 2);
-    Serial.println(linha);
+    // Exibe resultado no formato desejado
+    Serial.print(datetime);
+    Serial.print(",");
+    Serial.println(distance_cm, 1);  // 1 casa decimal
+  } else {
+    Serial.println("Erro ao obter hora local");
+  }
 
-    id++;
-    delay(2000);
+  delay(500);  // Aguarda meio segundo para próxima leitura
 }
